@@ -9,3 +9,15 @@ Please send me an email to sameer@axiomne.com if you need any support to run thi
 with respect to user documentation.
 
 # User Instructions #
+
+To create the model use the following command
+execwindows.cmd createModel
+
+To apply the model generated in the last step execute the following command
+execwindows.cmd useModel
+
+##Configuration##
+The configurations are provided in the config/TopicModeling.properties file
+
+##Sample Training Data##
+The sample training data is in the data/training/ap.txt file
