@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+      http://www.springframework.org/schema/util 
+      http://www.springframework.org/schema/util/spring-util-3.2.xsd
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+      http://www.springframework.org/schema/context 
+      http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+<!-- <bean/> definitions here -->
+<context:property-placeholder location="classpath:TopicModeling.properties"/>
+<bean
+    class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <property
+        name="targetObject">
+       
+        <bean
+            class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+            <property name="targetClass" value="java.lang.System" />
+            <property name="targetMethod" value="getProperties" />
+        </bean>
+    </property>
+    <property
+        name="targetMethod"
+        value="putAll" />
+    <property
+        name="arguments">        
+        <util:properties>
+            <prop key="InvokedFromSpring">true</prop>   
+        </util:properties>
+    </property>
+</bean>
+
+<bean id="WorkingDirectory" class="org.bigtextml.client.WorkingDirectory">
+	<property name="directory" value="${PLDA_WORKING_DIR}"/>
+</bean>
+
+<bean id="ParallelTopicModelClient"
+        class="org.bigtextml.client.ParallelTopicModelClient">
+  		<property name="threadCnt" value="${PLDA_THREAD_CNT}"/>
+  		<property name="threadPoolSize" value="${PLDA_THREADPOOL_SIZE}"/>
+  		<property name="topicModelPath" value="${PLDA_MODEL_PATH}"/>
+  		
+  		<property name="workingDirectory">
+  			<ref bean ="WorkingDirectory"/>
+  		</property>
+  		<property name="stopListFilePath" value="${PLDA_STOPLIST_FILE}"/>	
+  		<property name="modelTrainingDataPath" value="${PLDA_MODEL_TRAINING_DATA_FILE}"/>  		
+  		<property name="iterationCnt" value="${PLDA_ITERATION_CNT}"/>
+  		<property name="probThreshold" value="${PLDA_PROB_THRESHOLD}"/>
+  		<property name="topicCnt" value="${PLDA_TOPIC_CNT}"/>
+  		<property name="alpha" value="${PLDA_ALPHA}"/>
+  		<property name="beta" value="${PLDA_BETA}"/>
+  		<property name="noOfWordsPerTopic" value="${PLDA_NO_OF_WORDS_PER_TOPIC}"/>
+  		<property name="printEveryNIterations" value="${PLDA_PRINT_EVERY_N_ITERATIONS}"/>
+  		<property name="modelTestingDataPath" value="${PLDA_MODEL_TESTING_DATA_FILE}"/>  
+  		<property name="modelTestingOutPath" value="${PLDA_MODEL_TESTING_OUT_FILE}"/>  
+  		
+</bean>	
+ 
+	<bean id="Instances"
+        class="java.util.HashMap" >  
+	</bean>	
+		<bean id="Alphabet_0"
+        class="org.bigtextml.bigcollections.BigMap" init-method="initialize" destroy-method="clear">
+  		<property name="maxInMemoryCapacity" value="1000"/>
+  		<property name="cacheName" value="Alphabet_0"/>
+  		<property name="keySplits" value="17"/>
+   		<!-- <property name="rootPath" value="${PLDA_WORKING_DIR}"/> -->	
+         <property name="workingDirectory">
+  			<ref bean ="WorkingDirectory"/>
+  		</property>  
+	</bean>		
+	
+	<bean id="Alphabet_1"
+        class="org.bigtextml.bigcollections.BigMap" init-method="initialize" destroy-method="clear">
+  		<property name="maxInMemoryCapacity" value="10000"/>
+  		<property name="cacheName" value="Alphabet_1"/>
+  		<property name="keySplits" value="97"/>
+  		<!-- <property name="rootPath" value="${PLDA_WORKING_DIR}"/> -->	
+         <property name="workingDirectory">
+  			<ref bean ="WorkingDirectory"/>
+  		</property>  	
+  		
+	</bean>	
+
+	<bean id="Entries_0"
+        class="org.bigtextml.bigcollections.BigEntries" init-method="initialize" destroy-method="clear">
+        <property name="cacheName" value="Entries_0"/>
+        <!-- <property name="rootPath" value="${PLDA_WORKING_DIR}"/> -->
+         <property name="workingDirectory">
+  			<ref bean ="WorkingDirectory"/>
+  		</property>
+        
+	</bean>		
+
+	<bean id="Entries_1"
+        class="org.bigtextml.bigcollections.BigEntries" init-method="initialize" destroy-method="clear">
+        <property name="cacheName" value="Entries_1"/>
+        <!-- <property name="rootPath" value="${PLDA_WORKING_DIR}"/> -->
+         <property name="workingDirectory">
+  			<ref bean ="WorkingDirectory"/>
+  		</property>         	
+	</bean>	
+
+	
+<bean id="TopicAssignment"
+        class="org.bigtextml.bigcollections.TopicAssignmentBigMap" init-method="initialize" destroy-method="clear">
+  		<property name="maxInMemoryCapacity" value="10000"/>
+  		<property name="cacheName" value="TopicAssignment"/>
+  		<property name="keySplits" value="97"/>
+  		<!-- <property name="rootPath" value="${PLDA_WORKING_DIR}"/> --> 
+  		<property name="deleteOnExit" value="false"/>
+        <property name="workingDirectory">
+  			<ref bean ="WorkingDirectory"/>
+  		</property>  			 
+	</bean>		
+
+</beans>
